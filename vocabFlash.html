@@ -5,10 +5,16 @@
   <title>Flashcard Builder</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<header>
-  <h1>Flashcard Builder</h1>
-</header>
 <body>
+  <header>
+    <h1>Flashcard Builder</h1>
+  </header>
+
+  <div class="sidebar">
+    <h2 id="deckTitle">My Deck</h2>
+    <div id="decksList"></div>
+  </div>
+
   <div class="flashcard">
     <div class="input-container">
       <label for="wordInput">Enter a Word:</label>
@@ -20,6 +26,7 @@
         <p id="definition"></p>
       </div>
     </div>
+    <button onclick="addToDeck()">Add to Deck</button>
   </div>
 
   <script src="script.js"></script>
