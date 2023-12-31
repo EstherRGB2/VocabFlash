@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flashcard Builder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="flashcard">
+    <h1>Flashcard Builder</h1>
+    <div class="input-container">
+      <label for="wordInput">Enter a Word:</label>
+      <input type="text" id="wordInput" placeholder="Type a word...">
+      <button onclick="getDefinition()">Get Definition</button>
+    </div>
+    <div class="card-container">
+      <div class="card" id="flashcard">
+        <p id="definition"></p>
+      </div>
+    </div>
+  </div>
+
+  <script defer src="script.js"></script>
+</body>
+</html>
