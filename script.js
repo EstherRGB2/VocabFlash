@@ -42,11 +42,21 @@ function addToDeck(word, definition) {
       words: [{ word: word.toLowerCase(), definition }],
     };
     decks.push(existingDeck);
+    displayDecks();
   } else {
-    // Add word and its definition to the existing 'MyDeck'
-    existingDeck.words.push({ word: word.toLowerCase(), definition });
-  }
+    // Check if the word already exists in the deck
+    const wordIndex = existingDeck.words.findIndex(
+      (item) => item.word === word.toLowerCase()
+    );
 
+    if (wordIndex === -1) {
+      // Add word and its definition to the existing 'MyDeck'
+      existingDeck.words.push({ word: word.toLowerCase(), definition });
+    } else {
+      console.log('Word already exists in the deck.');
+      return; // Exit the function if the word already exists
+    }
+  }
   localStorage.setItem('decks', JSON.stringify(decks));
 }
 
@@ -120,7 +130,7 @@ function renameDeck(index) {
 // Display decks when the page loads
 displayDecks();
 
-// displayDecks function to include "Study" button
+// Update the displayDecks function to include "Study" button
 function displayDecks() {
   const decksList = document.getElementById('decksList');
   decksList.innerHTML = ''; // Clear previous deck list
@@ -146,6 +156,7 @@ function studyDeck(deckIndex) {
 
   let deck = getDecks()[deckIndex];
   let currentIndex = 0;
+  let isDefinition = false; // Flag to track if the definition is displayed
 
   const nextWordButton = document.createElement('button');
   nextWordButton.innerText = 'Next Word';
@@ -169,6 +180,7 @@ function studyDeck(deckIndex) {
   nextWordButton.addEventListener('click', () => {
     if (currentIndex < deck.words.length) {
       flashcard.textContent = deck.words[currentIndex].word;
+      isDefinition = false; // Reset the flag when showing the word
       currentIndex++;
     } else {
       flashcard.textContent = 'No more words in this deck.';
@@ -177,7 +189,13 @@ function studyDeck(deckIndex) {
 
   flashcard.addEventListener('click', () => {
     if (currentIndex <= deck.words.length) {
-      flashcard.textContent = deck.words[currentIndex - 1].definition;
+      if (isDefinition) {
+        flashcard.textContent = deck.words[currentIndex - 1].word;
+        isDefinition = false; // Switch to display the word
+      } else {
+        flashcard.textContent = deck.words[currentIndex - 1].definition;
+        isDefinition = true; // Switch to display the definition
+      }
     }
   });
 }

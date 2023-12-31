@@ -50,12 +50,21 @@ header h1 {
   margin: 0 auto;
 }
 
+.sidebar {
+  margin: 20px;
+}
+
 .flashcard {
   text-align: center;
 }
 
 .input-container {
-  margin-bottom: 20px;
+  margin: 20px;
+  width: 600px;
+  border-radius: 8px;
+  background:rgb(200, 216, 250);
+  font-weight: 600;
+  font-size: 20px;
 }
 
 input[type="text"] {
@@ -71,18 +80,25 @@ button {
   cursor: pointer;
   background-color: blue;
   color: #fff;
-  border-radius: 0.5rem;
+  border-radius: 2rem;
+  margin: 10px;
+}
+
+button:hover {
+  background-color: rgb(220, 250, 84);
+  color: blue;
 }
 
 .card-container {
   display: flex;
   justify-content: center;
+
 }
 
 .card {
-  width: 300px;
-  height: 200px;
-  background-image: linear-gradient(to bottom, rgb(186, 217, 243), #5c5975);
+  width: 600px;
+  height: 300px;
+  background-image: linear-gradient(to bottom, rgb(200, 216, 250), rgb(148, 160, 185));
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -91,13 +107,19 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 10px;
+  margin-bottom: 15px;
   font-size: 32px;
   font-style: bold;
   font-weight: 600;
-  color: white;
+  color: rgb(41, 40, 40);
+  text-shadow: 2px 2px, rgb(17, 17, 128);
+  font-family: Georgia, serif;
 }
 
 #definition {
-  font-size: 18px;
+  font-size: 32px;
+  text-shadow: #4d10be;
   padding: 10px;
+  font-family: Georgia, serif;
 }
