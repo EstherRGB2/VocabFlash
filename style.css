@@ -67,6 +67,15 @@ header h1 {
   font-size: 20px;
 }
 
+.flashcard-navigation {
+  margin: 20px;
+  width: 600px;
+  border-radius: 8px;
+  background:rgb(200, 216, 250);
+  font-weight: 600;
+  font-size: 20px;
+}
+
 input[type="text"] {
   padding: 8px;
   font-size: 16px;
