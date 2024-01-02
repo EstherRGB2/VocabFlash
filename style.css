@@ -70,6 +70,7 @@ header h1 {
 input[type="text"] {
   padding: 8px;
   font-size: 16px;
+  border-radius: 2px;
 }
 
 button {
@@ -81,6 +82,7 @@ button {
   background-color: blue;
   color: #fff;
   border-radius: 2rem;
+  border-color:aqua;
   margin: 10px;
 }
 
@@ -92,7 +94,6 @@ button:hover {
 .card-container {
   display: flex;
   justify-content: center;
-
 }
 
 .card {
@@ -109,17 +110,19 @@ button:hover {
   align-items: center;
   padding: 10px;
   margin-bottom: 15px;
-  font-size: 32px;
+  font-size: 28px;
   font-style: bold;
   font-weight: 600;
   color: rgb(41, 40, 40);
   text-shadow: 2px 2px, rgb(17, 17, 128);
-  font-family: Georgia, serif;
+  font-family: Georgia, italic;
+  border: 2px solid rgb(200, 214, 150);
+  outline: rgb(166, 177, 177) solid 2px;
 }
 
 #definition {
-  font-size: 32px;
+  font-size: 28px;
   text-shadow: #4d10be;
   padding: 10px;
-  font-family: Georgia, serif;
+  font-family: Georgia, italic;
 }

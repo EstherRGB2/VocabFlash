@@ -127,9 +127,6 @@ function renameDeck(index) {
   }
 }
 
-// Display decks when the page loads
-displayDecks();
-
 // Update the displayDecks function to include "Study" button
 function displayDecks() {
   const decksList = document.getElementById('decksList');
@@ -146,6 +143,9 @@ function displayDecks() {
     decksList.appendChild(deckItem);
   }
 }
+
+// Display decks when the page loads
+displayDecks();
 
 // Function to handle study mode for a deck
 function studyDeck(deckIndex) {
