@@ -15,21 +15,19 @@
   <div class="sidebar">
     <h2 id="deckTitle">My Deck</h2>
     <div id="decksList"></div>
-    <button onclick="redirectTo_studyMode()">Study</button>
   </div>
 
   <div class="flashcard">
-    <div class="input-container">
-      <label for="wordInput">Enter a Word:</label>
-      <input type="text" id="wordInput" placeholder="Type a word...">
-      <button onclick="getDefinition()">Get Definition</button>
-    </div>
+    <nav class="flashcard-navigation">
+      <button onclick = "nextWordButton.addEventListener()">Next Word</button>
+      <button onclick="redirectToIndex()">Build</button>
+    </nav>
     <div class="card-container">
       <div class="card" id="flashcard">
         <p id="definition"></p>
       </div>
     </div>
-    <button onclick="addToDeck()">Add to Deck</button>
+    <button onclick="removeFromDeck()">Remove From Deck</button>
   </div>
 
   <script src="script.js"></script>

@@ -1,3 +1,10 @@
+document.addEventListener('DOMContentLoaded', function () {
+  const getDefinitionButton = document.querySelector('#wordInput + button');
+  if (getDefinitionButton) {
+    getDefinitionButton.addEventListener('click', getDefinition);
+  }
+});
+
 async function getDefinition() {
   const wordInput = document.getElementById('wordInput').value.trim();
   if (wordInput === '') {
@@ -79,19 +86,7 @@ function displayDecks() {
 
   const decks = getDecks();
   const myDeck = decks.find((deck) => deck.name === 'MyDeck');
-
-  if (myDeck) {
-    const deckItem = document.createElement('div');
-    deckItem.innerHTML = `<div class="deck-item" data-deckindex="0">
-                            <span>${myDeck.name}</span>
-                            <input type="text" placeholder="Rename Deck" style="display:none;">
-                            <button onclick="renameDeck(0)">Rename</button>
-                            <button onclick="studyDeck(0)">Study</button>
-                          </div>`;
-    decksList.appendChild(deckItem);
-  }
 }
-
 // Function to retrieve decks from localStorage
 function getDecks() {
   let decks = JSON.parse(localStorage.getItem('decks')) || [];
@@ -103,84 +98,20 @@ function saveDecks(decks) {
   localStorage.setItem('decks', JSON.stringify(decks));
 }
 
-// Function to handle renaming a deck
-function renameDeck(index) {
-  const deckItems = document.querySelectorAll('.deck-item');
-  const inputField = deckItems[index].querySelector('input');
-  const deckSpan = deckItems[index].querySelector('span');
-
-  if (inputField.style.display === 'none') {
-    deckSpan.style.display = 'none';
-    inputField.style.display = 'block';
-    inputField.value = deckSpan.textContent;
-    inputField.focus();
-  } else {
-    const decks = getDecks();
-    decks[index].name = inputField.value;
-    saveDecks(decks);
-
-    inputField.style.display = 'none';
-    deckSpan.style.display = 'inline';
-    deckSpan.textContent = inputField.value;
-
-    displayDecks(); // Refresh the deck list after renaming
-  }
-}
-
-// Update the displayDecks function to include "Study" button
-function displayDecks() {
-  const decksList = document.getElementById('decksList');
-  decksList.innerHTML = ''; // Clear previous deck list
-
-  const decks = getDecks();
-  const myDeck = decks.find((deck) => deck.name === 'MyDeck');
-
-  if (myDeck) {
-    const deckItem = document.createElement('div');
-    deckItem.innerHTML = `<div class="deck-item" data-deckindex="0">
-                            <button onclick="studyDeck(0)">Study</button>
-                          </div>`;
-    decksList.appendChild(deckItem);
-  }
-}
-
-// Display decks when the page loads
-displayDecks();
-
 // Function to handle study mode for a deck
 function studyDeck(deckIndex) {
-  const inputContainer = document.querySelector('.input-container');
   const flashcard = document.getElementById('flashcard');
-  const studyButtons = document.createElement('div');
-  studyButtons.classList.add('study-buttons');
-
   let deck = getDecks()[deckIndex];
   let currentIndex = 0;
-  let isDefinition = false; // Flag to track if the definition is displayed
+  let isDefinition = false;
 
-  const nextWordButton = document.createElement('button');
-  nextWordButton.innerText = 'Next Word';
-
-  const buildButton = document.createElement('button');
-  buildButton.innerText = 'Build';
-  buildButton.addEventListener('click', () => {
-    inputContainer.innerHTML = `
-      <label for="wordInput">Enter a Word:</label>
-      <input type="text" id="wordInput" placeholder="Type a word...">
-      <button onclick="getDefinition()">Get Definition</button>
-    `;
-    flashcard.innerHTML = '<p id="definition"></p>';
-  });
-
-  studyButtons.appendChild(nextWordButton);
-  studyButtons.appendChild(buildButton);
-  inputContainer.innerHTML = '';
-  inputContainer.appendChild(studyButtons);
+  const nextWordButton = document.querySelector('.flashcard-navigation button:first-child');
+  const buildButton = document.querySelector('.flashcard-navigation button:last-child');
 
   nextWordButton.addEventListener('click', () => {
     if (currentIndex < deck.words.length) {
-      flashcard.textContent = deck.words[currentIndex].word;
-      isDefinition = false; // Reset the flag when showing the word
+      flashcard.textContent = isDefinition ? deck.words[currentIndex].word : deck.words[currentIndex].definition;
+      isDefinition = !isDefinition;
       currentIndex++;
     } else {
       flashcard.textContent = 'No more words in this deck.';
@@ -191,11 +122,126 @@ function studyDeck(deckIndex) {
     if (currentIndex <= deck.words.length) {
       if (isDefinition) {
         flashcard.textContent = deck.words[currentIndex - 1].word;
-        isDefinition = false; // Switch to display the word
+        isDefinition = false;
       } else {
         flashcard.textContent = deck.words[currentIndex - 1].definition;
-        isDefinition = true; // Switch to display the definition
+        isDefinition = true;
       }
     }
   });
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  const getDefinitionButton = document.querySelector('#wordInput + button');
+  if (getDefinitionButton) {
+    getDefinitionButton.addEventListener('click', getDefinition);
+  }
+
+  const nextWordButton = document.querySelector('.flashcard-navigation button:first-child');
+  if (nextWordButton) {
+    nextWordButton.addEventListener('click', showNextWord);
+  }
+
+  const flashcard = document.getElementById('flashcard');
+  flashcard.addEventListener('click', toggleWordDefinition); // Add click event listener for the flashcard
+  displayFirstWord();
+});
+
+let currentIndex = 0;
+let isDefinition = false; // Define outside the function to maintain state
+
+// Function to display the first word from the deck when the page loads
+function displayFirstWord() {
+  let deck = getDecks().find((deck) => deck.name === 'MyDeck');
+  const flashcard = document.getElementById('flashcard');
+
+  if (deck && deck.words.length > 0) {
+    flashcard.textContent = deck.words[0].word; // Display the first word
+    isDefinition = true; // Start by showing the definition for the first word
+    currentIndex = 1; // Update the index for subsequent words
+  } else {
+    flashcard.textContent = 'No words in this deck.';
+  }
+}
+
+function showNextWord() {
+  let deck = getDecks().find((deck) => deck.name === 'MyDeck');
+  const flashcard = document.getElementById('flashcard');
+
+  if (deck) {
+    const { words } = deck;
+
+    if (currentIndex < words.length) {
+      flashcard.textContent = isDefinition ? words[currentIndex].word : words[currentIndex].definition;
+      isDefinition = !isDefinition;
+      currentIndex++;
+    } else {
+      flashcard.textContent = 'No more words in this deck.';
+    }
+  } else {
+    flashcard.textContent = 'No deck found.';
+  }
+}
+
+function toggleWordDefinition() {
+  let deck = getDecks().find((deck) => deck.name === 'MyDeck');
+  const flashcard = document.getElementById('flashcard');
+
+  if (deck) {
+    const { words } = deck;
+
+    if (currentIndex <= words.length) {
+      if (isDefinition) {
+        flashcard.textContent = words[currentIndex - 1].word;
+        isDefinition = false;
+      } else {
+        flashcard.textContent = words[currentIndex - 1].definition;
+        isDefinition = true;
+      }
+    }
+  } else {
+    flashcard.textContent = 'No deck found.';
+  }
+}
+
+
+  function removeFromDeck() {
+    const currentWord = document.getElementById('flashcard').textContent.trim();
+
+    if (currentWord === '' || currentWord === 'No more words in this deck.') {
+      alert('No word to remove.');
+      return;
+    }
+
+    let decks = getDecks();
+    let myDeck = decks.find((deck) => deck.name === 'MyDeck');
+
+    if (myDeck) {
+      const wordIndex = myDeck.words.findIndex(
+        (item) => item.word.toLowerCase() === currentWord.toLowerCase()
+      );
+
+      if (wordIndex !== -1) {
+        myDeck.words.splice(wordIndex, 1); // Remove the word from the deck
+        saveDecks(decks); // Save the updated deck to localStorage
+        console.log('Word removed from the deck.');
+        // Optionally update the display or perform any necessary actions after removal.
+      } else {
+        console.log('Word not found in the deck.');
+        // Word not found in the deck; handle the case accordingly.
+      }
+    }
+  }
+
+function redirectToIndex() {
+  // Redirect the user to index.html
+  window.location.href = 'index.html';
+}
+
+function redirectTo_studyMode() {
+  // Redirect the user to index.html
+  window.location.href = 'studyMode.html';
+}
+
+// Display decks when the page loads
+displayDecks();
